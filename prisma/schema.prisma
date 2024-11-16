@@ -23,6 +23,7 @@ model Wine {
     tastings Tasting[]
     scores Score[]
     createdAt DateTime @default(now())
+    publishedAt DateTime? 
     updatedAt DateTime? @updatedAt
     countryId Int?
     country Country? @relation(fields: [countryId], references: [id])

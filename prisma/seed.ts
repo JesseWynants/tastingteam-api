@@ -317,6 +317,7 @@ async function seedWines(){
                 price: wijn.fields.Prijs || null,
                 where_to_buy: wijn.fields['Waar verkrijgbaar?'] || undefined,
                 userId: await getUserId(wijn.fields.Promotor),
+                publishedAt: wijn.fields.Visible ? (wijn.fields.created ? new Date(String(wijn.fields.created)) : null) : null,
                 label: label,
                 wine_type: mapTypetoEnum(wijn.fields.type),
                 tastings: {
@@ -335,6 +336,7 @@ async function seedWines(){
                 price: wijn.fields.Prijs || null,
                 where_to_buy: wijn.fields['Waar verkrijgbaar?'] || undefined,
                 userId: await getUserId(wijn.fields.Promotor),
+                publishedAt: wijn.fields.Visible ? (wijn.fields.created ? new Date(String(wijn.fields.created)) : null) : null,
                 label: label,
                 wine_type: mapTypetoEnum(wijn.fields.type),
                 tastings: {
