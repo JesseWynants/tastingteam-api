@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Wine {
+    id Int @id @default(autoincrement())
+    name String @unique
+    number Int?
+    vintage Int?
+    grapes Grape[] @relation("WineToGrape")
+    user_description String?
+    wine_type WineType?
+    price Float?
+    where_to_buy String?
+    label String?
+    userId String?
+    user User? @relation(fields: [userId], references: [id])
+    tastings Tasting[]
+    scores Score[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+    countryId Int?
+    country Country? @relation(fields: [countryId], references: [id])
+}
+model Tasting {
+    id Int @id @default(autoincrement())
+    edition Int?
+    location String?
+    theme String?
+    wines Wine[]
+    teamId Int
+    team Team @relation(fields: [teamId], references: [id])
+    participants User[]
+    time DateTime?
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+}
+model Team {
+    id Int @id @default(autoincrement())
+    name String @unique
+    users User[]
+    tastings Tasting[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+}
+model Score {
+    userId String
+    wineId Int
+    score Float
+    note String?
+    kelder Boolean?
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    wine Wine? @relation(fields: [wineId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+    @@unique([userId, wineId])
+}
+model WineLabel {
+    id Int @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+}
+enum WineType {
+    WHITE
+    RED
+    ROSE
+    SPARKLING
+}
+model Country {
+    id Int @id @default(autoincrement())
+    name String @unique
+    Flag String?
+    Region String?
+    wines Wine[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+}
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    wines         Wine[]
+    scores        Score[]
+    teams         Team[]
+    tastings      Tasting[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime? @updatedAt
+}
+model Grape {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+  type WineType @default(RED)
+  wines Wine[] @relation("WineToGrape")
+}
