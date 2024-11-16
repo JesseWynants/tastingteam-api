@@ -16,7 +16,10 @@ export class WinesController {
   findAll() {
     return this.winesService.findAll();
   }
-
+  @Get('drafts')
+  findDrafts() {
+    return this.winesService.findDrafts();
+  }
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.winesService.findOne(+id);

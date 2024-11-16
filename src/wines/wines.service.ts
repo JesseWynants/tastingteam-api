@@ -12,11 +12,14 @@ export class WinesService {
   }
 
   findAll() {
-    return this.prisma.wine.findMany();
+    return this.prisma.wine.findMany({ where: { publishedAt: { not: null } } });
+  }
+  findDrafts() {
+    return this.prisma.wine.findMany({ where: { publishedAt: null } });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} wine`;
+    return this.prisma.wine.findUnique({ where: { id } });
   }
 
   update(id: number, updateWineDto: UpdateWineDto) {
