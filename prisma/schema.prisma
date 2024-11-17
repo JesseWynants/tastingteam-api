@@ -2,6 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator class_generator {
+  provider = "prisma-class-generator"
+  dryRun = false
+  output = "../src/generated/classes"
+  dtoPattern = "**/*.dto.ts"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

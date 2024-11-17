@@ -8,7 +8,17 @@ export class WinesService {
   constructor(private prisma: PrismaService) {}
 
   create(createWineDto: CreateWineDto) {
-    return 'This action adds a new wine';
+    return this.prisma.wine.create({
+      data: {
+        ...createWineDto,
+        country: createWineDto.country ? {
+          connect: { id: createWineDto.country.id }
+        } : undefined,
+        grapes: {
+          connect: createWineDto.grapes.map(grape => ({ id: grape.id }))
+        }
+      }
+    });
   }
 
   findAll() {
@@ -23,10 +33,21 @@ export class WinesService {
   }
 
   update(id: number, updateWineDto: UpdateWineDto) {
-    return `This action updates a #${id} wine`;
+    return this.prisma.wine.update({
+      where: { id },
+      data: {
+        ...updateWineDto,
+        country: updateWineDto.country ? {
+          connect: { id: updateWineDto.country.id }
+        } : undefined,
+        grapes: {
+          set: updateWineDto.grapes.map(grape => ({ id: grape.id }))
+        }
+      }
+    });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} wine`;
+    return this.prisma.wine.delete({ where: { id } });
   }
 }
