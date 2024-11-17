@@ -14,9 +14,9 @@ export class WinesService {
         country: createWineDto.country ? {
           connect: { id: createWineDto.country.id }
         } : undefined,
-        grapes: {
+        grapes: createWineDto.grapes ? {
           connect: createWineDto.grapes.map(grape => ({ id: grape.id }))
-        }
+        } : undefined
       }
     });
   }

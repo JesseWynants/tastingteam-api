@@ -18,6 +18,9 @@ import {
     IsNumber,
     IsArray,
     ValidateNested,
+    Length,
+    Min,
+    Max
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -36,9 +39,8 @@ export class CreateWineDto {
     name: string;
 
     @IsInt()
-    @MaxLength(4)
-    @MinLength(4)
-    @IsNotEmpty()
+    @Min(1000)
+    @Max(9999)
     @ApiProperty({ required: false })
     vintage?: number;
 
