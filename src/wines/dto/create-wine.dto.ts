@@ -5,29 +5,69 @@ import { Tasting } from '../../generated/classes/tasting'
 import { Score } from '../../generated/classes/score'
 import { Country } from '../../generated/classes/country'
 import { ApiProperty } from '@nestjs/swagger'
-
-export class CreateWineDto {
-    @ApiProperty()
-    name: string;
-    @ApiProperty({ required: false })
-    vintage?: number;
-    @ApiProperty({ required: false })
-    user_description?: string;
-    @ApiProperty({ required: false })
-    wine_type?: WineType;
-    @ApiProperty({ required: false })
-    price?: number;
-    @ApiProperty({ required: false })
-    where_to_buy?: string;
-    @ApiProperty({ type: [Grape], required: false })
-    grapes?: Grape[];
-    @ApiProperty({ type: Country, required: false })
-    country?: Country;
-}
+import {
+    IsBoolean,
+    IsNotEmpty,
+    IsInt,
+    IsOptional,
+    IsString,
+    MaxLength,
+    MinLength,
+    IsIn,
+    IsEnum,
+    IsNumber,
+    IsArray,
+    ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 export enum WineType {
-  RED = 'RED',
-  WHITE = 'WHITE',
-  ROSE = 'ROSE',
-  SPARKLING = 'SPARKLING'
+RED = 'RED',
+WHITE = 'WHITE',
+ROSE = 'ROSE',
+SPARKLING = 'SPARKLING'
+}
+
+export class CreateWineDto {
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(2)
+    @ApiProperty()
+    name: string;
+
+    @IsInt()
+    @MaxLength(4)
+    @MinLength(4)
+    @IsNotEmpty()
+    @ApiProperty({ required: false })
+    vintage?: number;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ required: false })
+    user_description?: string;
+
+    @IsEnum(WineType)
+    @ApiProperty({ required: false })
+    wine_type?: WineType;
+
+    @IsOptional()
+    @IsNumber( ( { maxDecimalPlaces: 2 } ) )
+    @ApiProperty({ required: false })
+    price?: number;
+
+    @IsOptional()
+    @IsString()
+    @ApiProperty({ required: false })
+    where_to_buy?: string;
+
+    @IsOptional()
+    @IsArray()
+    @ApiProperty({ type: [Grape], required: false })
+    grapes?: Grape[];
+    
+    @IsOptional()
+    @IsArray()
+    @ApiProperty({ type: Country, required: false })
+    country?: Country;
 }
