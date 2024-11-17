@@ -12,19 +12,23 @@ export class WinesController {
 
   @Post()
   @ApiCreatedResponse({ type: WineEntity })
-  create(@Body() createWineDto: CreateWineDto) {
-    return this.winesService.create(createWineDto);
+  async create(@Body() createWineDto: CreateWineDto) {
+    return new WineEntity(
+      await this.winesService.create(createWineDto),
+    );
   }
 
   @Get()
   @ApiOkResponse({ type: [WineEntity] })
-  findAll() {
-    return this.winesService.findAll();
+  async findAll() {
+    const wines = await this.winesService.findAll();
+    return wines.map((wine) => new WineEntity(wine));
   }
   @Get('drafts')
   @ApiOkResponse({ type: [WineEntity] })
-  findDrafts() {
-    return this.winesService.findDrafts();
+  async findDrafts() {
+    const drafts = await this.winesService.findDrafts();
+    return drafts.map((draft) => new WineEntity(draft));
   }
   @Get(':id')
   @ApiOkResponse({ type: WineEntity })
@@ -33,18 +37,18 @@ export class WinesController {
     if (!wine) {
       throw new NotFoundException(`Wine #${id} not found`);
     }
-    return wine;
+    return new WineEntity(wine);
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: WineEntity })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateWineDto: UpdateWineDto) {
-    return this.winesService.update(+id, updateWineDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateWineDto: UpdateWineDto) {
+    return new WineEntity(await this.winesService.update(+id, updateWineDto));
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: WineEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.winesService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return new WineEntity(await this.winesService.remove(+id));
   }
 }

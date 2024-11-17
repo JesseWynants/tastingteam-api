@@ -29,7 +29,10 @@ export class WinesService {
   }
 
   findOne(id: number) {
-    return this.prisma.wine.findUnique({ where: { id } });
+    return this.prisma.wine.findUnique({ 
+      where: { id },
+      include: { grapes: true, country: true, user: true }
+    });
   }
 
   update(id: number, updateWineDto: UpdateWineDto) {
@@ -43,7 +46,8 @@ export class WinesService {
         grapes: {
           set: updateWineDto.grapes.map(grape => ({ id: grape.id }))
         }
-      }
+      },
+      include: { grapes: true, country: true, user: true }
     });
   }
 

@@ -1,6 +1,8 @@
 import { Wine } from "@prisma/client";
 import { ApiProperty } from "@nestjs/swagger";
 import { Grape } from "src/generated/classes/grape";
+import { UserEntity } from "src/users/entities/user.entity";
+import { WineType } from '@prisma/client';
 
 export class WineEntity implements Wine {
     @ApiProperty()
@@ -27,17 +29,25 @@ export class WineEntity implements Wine {
     wine_type: WineType;
     @ApiProperty()
     price: number;
+    @ApiProperty({ required: false, type: UserEntity })
+    user?: UserEntity;
     @ApiProperty()
     where_to_buy: string;
     @ApiProperty()
     countryId: number;
     @ApiProperty({ type: [Grape], required: false })
-    grapes?: Grape[];
+    grapes?: Partial<Grape>[];
+    
+    constructor(partial: Partial<WineEntity>) {
+        Object.assign(this, {
+            ...partial,
+            grapes: partial.grapes?.map(grape => ({
+                ...grape,
+                wines: (grape as any).wines || []
+            }))
+        });
+        if (partial.user) {
+            this.user = new UserEntity(partial.user);
+          }
+        }
 }
-
-export enum WineType {
-    RED = 'RED',
-    WHITE = 'WHITE',
-    ROSE = 'ROSE',
-    SPARKLING = 'SPARKLING'
-  }
