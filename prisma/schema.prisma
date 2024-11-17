@@ -93,6 +93,7 @@ model User {
     name          String?
     email         String?   @unique
     emailVerified DateTime?
+    password      String?
     image         String?
     wines         Wine[]
     scores        Score[]

@@ -18,6 +18,9 @@ export class User {
   emailVerified?: Date;
 
   @ApiPropertyOptional({ type: String })
+  password?: string;
+
+  @ApiPropertyOptional({ type: String })
   image?: string;
 
   @ApiProperty({ isArray: true, type: () => Wine })

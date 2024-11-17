@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, ParseIntPipe } from '@nestjs/common';
 import { WinesService } from './wines.service';
 import { CreateWineDto } from './dto/create-wine.dto';
 import { UpdateWineDto } from './dto/update-wine.dto';
@@ -28,19 +28,23 @@ export class WinesController {
   }
   @Get(':id')
   @ApiOkResponse({ type: WineEntity })
-  findOne(@Param('id') id: string) {
-    return this.winesService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const wine = await this.winesService.findOne(+id);
+    if (!wine) {
+      throw new NotFoundException(`Wine #${id} not found`);
+    }
+    return wine;
   }
 
   @Patch(':id')
   @ApiOkResponse({ type: WineEntity })
-  update(@Param('id') id: string, @Body() updateWineDto: UpdateWineDto) {
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateWineDto: UpdateWineDto) {
     return this.winesService.update(+id, updateWineDto);
   }
 
   @Delete(':id')
   @ApiOkResponse({ type: WineEntity })
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.winesService.remove(+id);
   }
 }

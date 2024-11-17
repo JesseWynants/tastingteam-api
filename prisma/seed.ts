@@ -76,11 +76,11 @@ function mapTypetoEnum (type:string | undefined){
 }
 async function main() {
     //await seedCountries();
-    //await seedUsers();
+    await seedUsers();
     //await seedTeams();
     //await seedGrapes();
     //await seedTastings();
-    await seedWines();
+    //await seedWines();
 }
 async function seedCountries(){
     let countries = await base.table('Countries').select().all();
@@ -148,10 +148,12 @@ async function seedUsers(){
             create: {
                 email: user.fields.Email,
                 name: user.fields.Name,
+                password: user.fields.Email,
             },
             update: {
                 email: user.fields.Email,
                 name: user.fields.Name,
+                password: user.fields.Email,
             }
         });
     }
