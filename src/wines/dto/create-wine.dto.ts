@@ -1,4 +1,5 @@
 import { Wine as WineDto } from '../../generated/classes/wine'
+import { WineType } from '@prisma/client'
 import { Grape } from '../../generated/classes/grape'
 import { User } from '../../generated/classes/user'
 import { Tasting } from '../../generated/classes/tasting'
@@ -23,13 +24,6 @@ import {
     Max
 } from 'class-validator';
 import { Type } from 'class-transformer';
-
-export enum WineType {
-RED = 'RED',
-WHITE = 'WHITE',
-ROSE = 'ROSE',
-SPARKLING = 'SPARKLING'
-}
 
 export class CreateWineDto {
     @IsString()
