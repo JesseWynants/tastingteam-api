@@ -5,6 +5,8 @@ import moment from 'moment';
 import { R2Client } from '../lib/R2';
 const base = new Airtable({apiKey: process.env.AIRTABLE_API_KEY}).base("appxu5yX91R3Qqpq8");
 const prisma = new PrismaClient();
+import * as bcrypt from 'bcrypt';
+const roundsOfHashing = 10;
 
 
 //@todo: rerun this for new tasting
@@ -148,12 +150,12 @@ async function seedUsers(){
             create: {
                 email: user.fields.Email,
                 name: user.fields.Name,
-                password: user.fields.Email,
+                password: await bcrypt.hash(user.fields.Email, roundsOfHashing),
             },
             update: {
                 email: user.fields.Email,
                 name: user.fields.Name,
-                password: user.fields.Email,
+                password: await bcrypt.hash(user.fields.Email, roundsOfHashing),
             }
         });
     }

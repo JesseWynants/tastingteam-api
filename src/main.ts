@@ -14,6 +14,7 @@ async function bootstrap() {
   .setTitle('Tasting Team API')
   .setDescription('API for Tasting Team')
   .setVersion('0.1')
+  .addBearerAuth()
   .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
